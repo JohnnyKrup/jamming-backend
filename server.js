@@ -6,9 +6,11 @@ let app = express()
 
 // hardcoded localhost RedirectURI
 let redirect_uri = process.env.REDIRECT_URI || 'http://localhost:8888/callback'
+// 04.05 stored the beginning of the Spotify Accounts url into a variable to reduce repetition of url writing in code
+let baseURL = 'https://accounts.spotify.com/'
 
 app.get('/login', function(req, res) {
-  res.redirect('https://accounts.spotify.com/authorize?' +
+  res.redirect(baseURL + 'authorize?' +
     querystring.stringify({
       response_type: 'code',
       client_id: process.env.SPOTIFY_CLIENT_ID,
@@ -20,7 +22,7 @@ app.get('/login', function(req, res) {
 app.get('/callback', function(req, res) {
   let code = req.query.code || null
   let authOptions = {
-    url: 'https://accounts.spotify.com/api/token',
+    url: baseURL + 'api/token',
     form: {
       code: code,
       redirect_uri,
